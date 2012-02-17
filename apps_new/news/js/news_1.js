@@ -1,0 +1,5 @@
+
+$('#app_s_input').keyup(function(e){var kc=e.keyCode;if(kc==13){onSubmit();}});function onSubmit(){var s=encodeURIComponent($('#app_s_input').val());if(s)
+window.open('http://news.baidu.com/ns?ie=utf-8&word='+s);}
+parent&&parent.J.add('news',{__keepAlive:0,init:function(){var _this=this;window.onload=function(){_this.__updateHeight();}}},window);var euc=encodeURIComponent;var url="http://st.1616.net/s.php?act=18&an=news&atn="+euc(window.__name)+"&url=@&un=@";$(document).mousedown(function(e){e=e.target||e.srcElement;if(e.nodeName=='A'){if(e.parentNode.id==='app_news_tab'){$('#stat_img')[0].src=url.replace('@',euc(e.href)).replace('@',euc(text(e))).replace(/atn=.*?&/,'atn=&');}else{$('#stat_img')[0].src=url.replace('@',euc(e.href)).replace('@',euc(text(e)));}}});function text(el){return'innerText'in el?el.innerText:el.textContent;}
+$(function(){$("a[href='#a0']").live("click",function(){var scroll=parent.document.documentElement||parent.document.body;scroll.scrollTop=0;});});
