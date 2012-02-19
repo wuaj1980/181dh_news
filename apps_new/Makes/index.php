@@ -1,31 +1,35 @@
 <?php 
-require 'config.php'; 
-$smarty->assign('hello','Hello Word'); 
-//$smarty->display('index.tpl');
-$news_dir = ROOT_DIR."/apps/news/";
+require 'config.php';
+require_once 'news-163.php';
+require_once 'news-ifeng.php';
+require_once 'news-qqpaihang.php';
+require_once 'news-sinapl.php';
+require_once 'news-qqht.php';
+require_once 'news-hlwyw.php';
+require_once 'news-rdjh.php';
+require_once 'news-tyrt.php';
+require_once 'news-163photo.php';
+require_once 'news-youku.php';
 
-// 头条新闻
-$news_emphasis = array(
- array("url" => "www.1.com", "title" => "haha1"),
- array("url" => "www.2.com", "title" => "haha2"),
- array("url" => "www.3.com", "title" => "haha3"),
- array("url" => "www.4.com", "title" => "haha4"),
- array("url" => "www.5.com", "title" => "haha5"),
- array("url" => "www.6.com", "title" => "haha6"),
- array("url" => "www.7.com", "title" => "haha7"),
- array("url" => "www.8.com", "title" => "haha8"),
- array("url" => "www.9.com", "title" => "haha9"),
- array("url" => "www.10.com", "title" => "haha10"),
- array("url" => "www.10.com", "title" => "haha11"),
- array("url" => "www.10.com", "title" => "haha12")
-);
-$smarty->assign("news_emphasis",$news_emphasis);
-
+$news_dir = ROOT_DIR."/apps_new/news/";
+$smarty->assign("newslist_163",$instance_163->getNewsList());//网易新闻
+$smarty->assign("newslist_ifeng",$instance_ifeng->getNewsList());//凤凰新闻
+$smarty->assign("newslist_qqpaihang",$instance_qqpaihang->getNewsList());//腾讯排行
+$smarty->assign("newslist_sinapl",$instance_sinapl->getNewsList());//新浪评论
+$smarty->assign("newslist_qqht",$instance_qqht->getNewsList());//腾讯话题
+$smarty->assign("newslist_hlwyw",$instance_hlwyw->getNewsList());//互联网要闻
+$smarty->assign("newslist_rdjh",$instance_rdjh->getNewsList());//人在江湖
+$smarty->assign("newslist_tyrt",$instance_tyrt->getNewsList());//天涯论坛 热帖
+$smarty->assign("newslist_163photo",$instance_163photo->getNewsList());//网易图片新闻
+$smarty->assign("newslist_youku",$instance_youku->getNewsList());//优酷视频新闻
 
 /* 首页生成 */
 $smarty->MakeHtmlFile($news_dir,"index.htm",$smarty->fetch("index.tpl"));
 echo "首页生成成功";
 
-
+  	   /*foreach($newslist as $e) 
+	   {
+	      echo $e.href;
+	   }*/
 
 ?>
