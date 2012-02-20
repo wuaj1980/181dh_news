@@ -14,7 +14,7 @@ require_once 'news-youku.php';
 $news_dir = ROOT_DIR."/apps_new/news/";
 $smarty->assign("newslist_163",$instance_163->getNewsList());//网易新闻
 $smarty->assign("newslist_ifeng",$instance_ifeng->getNewsList());//凤凰新闻
-$smarty->assign("newslist_qqpaihang",$instance_qqpaihang->getNewsList());//腾讯排行
+//$smarty->assign("newslist_qqpaihang",$instance_qqpaihang->getNewsList());//腾讯排行
 $smarty->assign("newslist_sinapl",$instance_sinapl->getNewsList());//新浪评论
 $smarty->assign("newslist_qqht",$instance_qqht->getNewsList());//腾讯话题
 $smarty->assign("newslist_hlwyw",$instance_hlwyw->getNewsList());//互联网要闻

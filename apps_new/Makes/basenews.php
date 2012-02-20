@@ -7,7 +7,16 @@ abstract class BaseNews
     ini_set("max_execution_time", 2400);
     ini_set("memory_limit", 1048576000);
 
-    $html = file_get_html($url);
+	$context = stream_context_create
+	(array( 
+		'http' => array
+	     (
+	        'proxy' => '172.28.138.13:8080',
+            'request_fulluri' => true,
+         ))
+	);
+
+    $html = file_get_html($url,false, $context);
     $news_list = $this->analytic($html);
     $hrefpre = $this->getHrefpre();
 
