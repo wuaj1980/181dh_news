@@ -21,8 +21,8 @@ function convertEncoding($html,$toEncoding){
   $formEncoding = "";
   if(!empty($toEncoding))
   {
-    $formEncoding = mb_detect_encoding($html,array("ASCII","UTF-8","GB2312","GBK",'BIG5'));
-    echo $formEncoding;
+    $formEncoding = mb_detect_encoding($html,array("ASCII","UTF-8","GB2312","GBK","BIG5"));
+   // echo $formEncoding;
     $contents = mb_convert_encoding($html,$toEncoding,$formEncoding);
   }
   return $contents;
