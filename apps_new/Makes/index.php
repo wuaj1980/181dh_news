@@ -4,18 +4,42 @@
   require_once 'news-info.php';
   require_once 'lib/request.php';
   require_once 'lib/simple_html_dom.php';
+  require_once 'lib/runtime.php';
 
   ini_set("max_execution_time", 2400);
   ini_set("memory_limit", 1048576000);
+  $proxy = '172.28.138.13:8080';
+
 
   $newslist_tt = array(); // 各大网站头条新闻
-/*
+  
+  $news_info_list = array(); // 各大网站头条新闻
+
   // 头条1
-  $siteinfo = new NewsInfo();
-  $siteinfo->url = "http://news.sina.com.cn/world/";
-  $siteinfo->pattern = "/<div\sclass=\"blkTop\"[^>]*>.*?<\/h1>/is";
-  getNewsInfo($siteinfo);
-  unset($siteinfo);
+  $runtime->start();
+  $news_info = new NewsInfo();
+  $news_info->url = "http://news.sina.com.cn/world/";
+  $news_info->pattern = "/<div\sclass=\"blkTop\"[^>]*>.*?<\/h1>/is";
+
+  array_push($news_info_list,$news_info);
+  execute($news_info_list,"add_newslist_tt",$proxy);
+  unset($news_info);
+    $news_info = new NewsInfo();
+  $news_info->url = "http://news.sina.com.cn/world/";
+  $news_info->pattern = "/<div\sclass=\"blkTop\"[^>]*>.*?<\/h1>/is";
+
+  array_push($news_info_list,$news_info);
+  execute($news_info_list,"add_newslist_tt",$proxy);
+  unset($news_info);
+  /*
+  //getNewsInfo($siteinfo);
+  $runtime->stop();
+  echo "头条1执行时间: ".$runtime->spent()." 毫秒";
+  
+
+ 
+
+
   // 国内
   $siteinfo = new NewsInfo();
   $siteinfo->url = "http://news.ifeng.com/mainland/";
@@ -86,7 +110,6 @@
   getNewsInfo($siteinfo);
   unset($siteinfo);
   $smarty->assign("newslist_tt",$newslist_tt);// 左边头条
-*/
 
   //var_dump($newslist_tt);
   // 网易新闻
@@ -96,24 +119,24 @@
   $siteinfo->pattern =  "/<ul\sclass=\"cList1\"[^>]*>.*?<\/ul>/is";
   getNewsInfo($siteinfo);
   unset($siteinfo);
-  var_dump($newslist_tt);
+  var_dump($newslist_tt); */
 
   //$smarty->assign("newslist_163",$instance_163->getNewsList());//网易新闻
 
 /* 首页生成 */
 //$news_dir = ROOT_DIR."/apps_new/news/";
 //$smarty->MakeHtmlFile($news_dir,"index.htm",$smarty->fetch("index.tpl"));
-echo "首页生成成功";
+//echo "首页生成成功";
 
   function getNewsInfo($siteinfo)
   {
     global $newslist_tt; 
-    //$proxy = '172.28.138.13:8080';
     $url = $siteinfo->url;
     $pattern = $siteinfo->pattern;
     $selector = $siteinfo->selector;
     $index = $siteinfo->index;
 
+    $proxy = '172.28.138.13:8080';
     $html = getWebContent($url,$proxy,"utf-8");
     preg_match($pattern,$html,$matches);
   //var_dump($html);
@@ -128,6 +151,7 @@ echo "首页生成成功";
         {
           $href = $element->href;
           $text = $element->plaintext;
+          $src  = $element->src;
         //echo $text . "                          " . $href . "<br>";
           $news = array("href" =>$href, "text" => $text,"src" => $src);
           array_push($newslist_tt,$news);
@@ -136,6 +160,7 @@ echo "首页生成成功";
         $element = $dom->find($selector,$index);
         $href = $element->href;
         $text = $element->plaintext;
+        $src  = $element->src;
         //echo $text . "                          " . $href . "<br>";
 
         $news = array("href" =>$href, "text" => $text,"src" => $src);
@@ -143,5 +168,11 @@ echo "首页生成成功";
       }
     }
   }
+  
+  function add_newslist_tt($html,$news_info_list)
+  {
+    echo "OK" . "<br>";
+  }
+  
 
 ?>
