@@ -8,69 +8,66 @@
 
   ini_set("max_execution_time", 2400);
   ini_set("memory_limit", 1048576000);
-  $proxy = '172.28.138.13:8080';
+  //$proxy = '172.28.138.13:8080';
 
 
   $newslist_tt = array(); // 各大网站头条新闻
   
   $news_info_list = array(); // 各大网站头条新闻
-
-  // 头条1
   $runtime->start();
-  $news_info = new NewsInfo();
-  $news_info->url = "http://news.sina.com.cn/world/";
-  $news_info->pattern = "/<div\sclass=\"blkTop\"[^>]*>.*?<\/h1>/is";
 
-  array_push($news_info_list,$news_info);
-  execute($news_info_list,"add_newslist_tt",$proxy);
-  unset($news_info);
-    $news_info = new NewsInfo();
-  $news_info->url = "http://news.sina.com.cn/world/";
-  $news_info->pattern = "/<div\sclass=\"blkTop\"[^>]*>.*?<\/h1>/is";
+  // 头条1-
+  $url = "http://news.sina.com.cn/world/";
+  $pattern = "/<div\sclass=\"blkTop\"[^>]*>.*?<\/h1>/is";
+  setNewsInfoList($url, $pattern);
+  
+  // 国内--
+  $url = "http://news.ifeng.com/mainland/";
+  $pattern = "/<div\sclass=\"sysNews sysNW hotNews\"[^>]*>.*?<\/h1>/is";
+  setNewsInfoList($url, $pattern);
+  
+   //$selector = "a", $index = 0, $urlpre = null
+  
+  // 社会
+  $url = "http://news.ifeng.com/society/";
+  $pattern = "/<h1\sclass=\"sysNW fz20\"[^>]*>.*?<\/h1>/is";
+  setNewsInfoList($url, $pattern);
+  
+  
+  
+  // 国际
+  $url = "http://news.sina.com.cn/world/";
+  $pattern = "/<div\sclass=\"blkTop\"[^>]*>.*<\/h1>/is";
+  setNewsInfoList($url, $pattern, 1);
 
-  array_push($news_info_list,$news_info);
+  // 娱乐 -
+  $url = "http://ent.sina.com.cn/";
+  $pattern = "/<div\sclass=\"S_Blk02\"[^>]*>.*?<\/h3>/is";
+  setNewsInfoList($url, $pattern);
+  // 国际-
+  $url = "http://news.ifeng.com/world/";
+  $pattern = "/<div\sclass=\"sysNews sysNW hotNews\"[^>]*>.*?<\/h1>/is";
+  setNewsInfoList($url, $pattern);
+
+  // 执行
   execute($news_info_list,"add_newslist_tt",$proxy);
-  unset($news_info);
+
   /*
   //getNewsInfo($siteinfo);
   $runtime->stop();
   echo "头条1执行时间: ".$runtime->spent()." 毫秒";
   
 
- 
 
+  getNewsInfo($siteinfo);
+  unset($siteinfo);
 
-  // 国内
-  $siteinfo = new NewsInfo();
-  $siteinfo->url = "http://news.ifeng.com/mainland/";
-  $siteinfo->pattern = "/<div\sclass=\"sysNews sysNW hotNews\"[^>]*>.*?<\/h1>/is";
   getNewsInfo($siteinfo);
   unset($siteinfo);
-  //  社会
-  $siteinfo = new NewsInfo();
-  $siteinfo->url = "http://news.ifeng.com/society/";
-  $siteinfo->pattern = "/<h1\sclass=\"sysNW fz20\"[^>]*>.*?<\/h1>/is";
+
   getNewsInfo($siteinfo);
   unset($siteinfo);
-  // 国际
-  $siteinfo = new NewsInfo();
-  $siteinfo->index = 1;
-  $siteinfo->url = "http://news.sina.com.cn/world/";
-  $siteinfo->pattern = "/<div\sclass=\"blkTop\"[^>]*>.*<\/h1>/is";
-  getNewsInfo($siteinfo);
-  unset($siteinfo);
-  // 娱乐
-  $siteinfo = new NewsInfo();
-  $siteinfo->url = "http://ent.sina.com.cn/";
-  $siteinfo->pattern = "/<div\sclass=\"S_Blk02\"[^>]*>.*?<\/h3>/is";
-  getNewsInfo($siteinfo);
-  unset($siteinfo);
-  // 国际
-  $siteinfo = new NewsInfo();
-  $siteinfo->url = "http://news.ifeng.com/world/";
-  $siteinfo->pattern = "/<div\sclass=\"sysNews sysNW hotNews\"[^>]*>.*?<\/h1>/is";
-  getNewsInfo($siteinfo);
-  unset($siteinfo);
+
 
   // 头条2
   $siteinfo = new NewsInfo();
@@ -128,6 +125,19 @@
 //$smarty->MakeHtmlFile($news_dir,"index.htm",$smarty->fetch("index.tpl"));
 //echo "首页生成成功";
 
+  function setNewsInfoList($url, $pattern, $selector = "a", $index = 0, $urlpre = null)
+  {
+    global $news_info_list;
+    $news_info = new NewsInfo();
+    $news_info->url = $url;
+    $news_info->pattern = $pattern;
+    $news_info->selector = $selector;
+    $news_info->index = $index;
+    $news_info->urlpre = $urlpre;
+    array_push($news_info_list,$news_info);
+    unset($news_info);
+  }
+
   function getNewsInfo($siteinfo)
   {
     global $newslist_tt; 
@@ -169,9 +179,57 @@
     }
   }
   
-  function add_newslist_tt($html,$news_info_list)
+  function add_newslist_tt($html,$news_info)
   {
-    echo "OK" . "<br>";
+    global $newslist_tt; 
+
+    $url = $news_info->url;
+//    echo $news_info->pattern . "<br>";
+    $pattern = $news_info->pattern;
+    $selector = $news_info->selector;
+    $index = $news_info->index;
+
+    preg_match($pattern,$html,$matches);
+  //var_dump($html);
+//$newslist_tt = array(); 
+
+
+    if(sizeof($matches) > 0)
+    {
+    //echo $news_info->pattern . "<br>--";
+    echo $matches[0] . "<br>--";
+      $dom = str_get_html($matches[0]);
+
+      if($index < -1)
+      {
+        $elements = $dom->find($selector);
+        foreach($elements as $element)
+        {
+          $href = $element->href;
+          $text = $element->plaintext;
+          $src  = $element->src;
+        //echo $text . "                          " . $href . "<br>";
+          $news = array("href" =>$href, "text" => $text,"src" => $src);
+          array_push($newslist_tt,$news);
+        }
+      } else {
+           //   echo "matches==>";
+        $element = $dom->find($selector,$index);
+        $href = $element->href;
+        $text = $element->plaintext;
+        $src  = $element->src;
+        //echo $text . "                          " . $href . "<br>";
+
+        $news = array("href" =>$href, "text" => $text,"src" => $src);
+        array_push($newslist_tt,$news);
+      }
+    }
+   // $pattern = $siteinfo->pattern;
+   // $selector = $siteinfo->selector;
+   // $index = $siteinfo->index;
+  	  
+  	  
+   // echo "OK" . "<br>";
   }
   
 
