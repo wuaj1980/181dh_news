@@ -2,7 +2,7 @@
 <?php 
   require_once 'config.php';
   require_once 'news-info.php';
-  require_once 'lib/request.php';
+  require_once 'lib/Http_MultiRequest.php';
   require_once 'lib/simple_html_dom.php';
   require_once 'lib/runtime.php';
 
@@ -10,6 +10,130 @@
   ini_set("memory_limit", 1048576000);
   //$proxy = '172.28.138.13:8080';
 
+  // 头条1-
+  $url = "http://news.sina.com.cn/world/";
+  $pattern = "/<div\sclass=\"blkTop\"[^>]*>.*?<\/h1>/is";
+  addNewsInfo($url, $pattern);
+  // 国内--
+  $url = "http://news.ifeng.com/mainland/";
+  $pattern = "/<div\sclass=\"sysNews sysNW hotNews\"[^>]*>.*?<\/h1>/is";
+  addNewsInfo($url, $pattern);
+  // 社会
+  $url = "http://news.ifeng.com/society/";
+  $pattern = "/<h1\sclass=\"sysNW fz20\"[^>]*>.*?<\/h1>/is";
+  addNewsInfo($url, $pattern);
+  // 国际
+  $url = "http://news.sina.com.cn/world/";
+  $pattern = "/<div\sclass=\"blkTop\"[^>]*>.*<\/h1>/is";
+  addNewsInfo($url, $pattern,'a', 2);
+  // 娱乐 -
+  $url = "http://ent.sina.com.cn/";
+  $pattern = "/<div\sclass=\"S_Blk02\"[^>]*>.*?<\/h3>/is";
+  addNewsInfo($url, $pattern);
+  // 国际-
+  $url = "http://news.ifeng.com/world/";
+  $pattern = "/<div\sclass=\"sysNews sysNW hotNews\"[^>]*>.*?<\/h1>/is";
+  addNewsInfo($url, $pattern);
+
+  // 头条2
+  $url = "http://news.163.com/";
+  $pattern = "/<h2\sclass=\"bigsize\"[^>]*>.*?<\/h2>/is";
+  addNewsInfo($url, $pattern);
+  // 体育
+  $index = 2;
+  $url = "http://sports.people.com.cn/";
+  $pattern = "/<div class=\"p1_center\"[^>]*>.*?<\/h3>/is";
+  addNewsInfo($url, $pattern,'a',$index);
+  // 国内
+  $url = "http://news.jinghua.cn/guonei/";
+  $pattern =  "/<div\sclass=\"left txt22 w_510\"[^>]*>.*?<\/h2>/is";
+  addNewsInfo($url, $pattern);
+  // 社会
+  $url = "http://www.chinanews.com/society.shtml";
+  $pattern =  "/<div\sclass=\"dd_bt\"[^>]*>.*?<\/div>/is";
+  addNewsInfo($url, $pattern);
+  // 娱乐
+  $url = "http://ent.163.com/";
+  $pattern =  "/<h3\sclass=\"bigsize\"[^>]*>.*?<\/h3>/is";
+  addNewsInfo($url, $pattern);
+  // 国际
+  $url = "http://www.zaobao.com/gj/gj.shtml";
+  $pattern =  "/<div\salign=\"left\"\sclass=\"title\"[^>]*>.*?<\/a>/is";
+  addNewsInfo($url, $pattern);
+
+  Http_MultiRequest::request();
+  
+    $newslist_tt = array();
+    sizeof($newslist_tt);
+    foreach($newslist_tt as $news)
+    {
+       echo $news["href"] . "      " . $news["text"] . "                          " .$news["src"] . "<br>";
+    }
+  
+echo "-----------------------------------------------------------";
+sizeof("==========" . sizeof($newslist_tt));
+  function callbackNews($news_info,$html,$time)
+  {
+    global $newslist_tt; 
+
+    $url = $news_info->url;
+    $pattern = $news_info->pattern;
+    $selector = $news_info->selector;
+    $index = $news_info->index;
+    $list_index = $news_info->list_index;
+
+    preg_match($pattern,$html,$matches);
+    if(sizeof($matches) > 0)
+    {
+      $dom = str_get_html($matches[0]);
+      
+      if($index < -1)
+      {
+        $elements = $dom->find($selector);
+        foreach($elements as $element)
+        {
+          $href = $element->href;
+          $text = $element->plaintext;
+          $src  = $element->src;
+        //echo $text . "                          " . $href . "<br>";
+          $news = array("href" =>$href, "text" => $text,"src" => $src);
+          //array_push($newslist_tt,$news);
+        }
+      } else {
+           //   echo "matches==>";
+        $element = $dom->find($selector,$index);
+        $href = $element->href;
+        $text = $element->plaintext;
+        $src  = $element->src;
+        echo $list_index . "      " . $text . "                          " . $href . "<br>";
+
+        $news = array("href" =>$href, "text" => $text,"src" => $src);
+        $newslist_tt[$list_index] = $news;
+        //array_push($newslist_tt,$news);
+      }
+      unset($dom);
+    }
+  }
+
+  $list_index = 0;
+  function addNewsInfo($url, $pattern, $selector = "a", $index = 0, $urlpre = null)
+  {
+    global $list_index;
+    $list_index = $list_index + 1;
+    $news_info = new NewsInfo();
+    $news_info->url = $url;
+    $news_info->pattern = $pattern;
+    $news_info->selector = $selector;
+    $news_info->index = $index;
+    $news_info->urlpre = $urlpre;
+    $news_info->list_index = $list_index;
+
+    $request = new Http_MultiRequest($news_info);
+    $request->addListener('callbackNews');
+    unset($news_info);
+  }
+
+/*
 
   $newslist_tt = array(); // 各大网站头条新闻
   
@@ -20,38 +144,21 @@
   $url = "http://news.sina.com.cn/world/";
   $pattern = "/<div\sclass=\"blkTop\"[^>]*>.*?<\/h1>/is";
   setNewsInfoList($url, $pattern);
-  
-  // 国内--
-  $url = "http://news.ifeng.com/mainland/";
-  $pattern = "/<div\sclass=\"sysNews sysNW hotNews\"[^>]*>.*?<\/h1>/is";
-  setNewsInfoList($url, $pattern);
+
+
+
+
+
+
+
+
   
    //$selector = "a", $index = 0, $urlpre = null
   
-  // 社会
-  $url = "http://news.ifeng.com/society/";
-  $pattern = "/<h1\sclass=\"sysNW fz20\"[^>]*>.*?<\/h1>/is";
-  setNewsInfoList($url, $pattern);
-  
-  
-  
-  // 国际
-  $url = "http://news.sina.com.cn/world/";
-  $pattern = "/<div\sclass=\"blkTop\"[^>]*>.*<\/h1>/is";
-  setNewsInfoList($url, $pattern, 1);
-
-  // 娱乐 -
-  $url = "http://ent.sina.com.cn/";
-  $pattern = "/<div\sclass=\"S_Blk02\"[^>]*>.*?<\/h3>/is";
-  setNewsInfoList($url, $pattern);
-  // 国际-
-  $url = "http://news.ifeng.com/world/";
-  $pattern = "/<div\sclass=\"sysNews sysNW hotNews\"[^>]*>.*?<\/h1>/is";
-  setNewsInfoList($url, $pattern);
 
   // 执行
   execute($news_info_list,"add_newslist_tt",$proxy);
-
+*/
   /*
   //getNewsInfo($siteinfo);
   $runtime->stop();
@@ -125,112 +232,6 @@
 //$smarty->MakeHtmlFile($news_dir,"index.htm",$smarty->fetch("index.tpl"));
 //echo "首页生成成功";
 
-  function setNewsInfoList($url, $pattern, $selector = "a", $index = 0, $urlpre = null)
-  {
-    global $news_info_list;
-    $news_info = new NewsInfo();
-    $news_info->url = $url;
-    $news_info->pattern = $pattern;
-    $news_info->selector = $selector;
-    $news_info->index = $index;
-    $news_info->urlpre = $urlpre;
-    array_push($news_info_list,$news_info);
-    unset($news_info);
-  }
-
-  function getNewsInfo($siteinfo)
-  {
-    global $newslist_tt; 
-    $url = $siteinfo->url;
-    $pattern = $siteinfo->pattern;
-    $selector = $siteinfo->selector;
-    $index = $siteinfo->index;
-
-    $proxy = '172.28.138.13:8080';
-    $html = getWebContent($url,$proxy,"utf-8");
-    preg_match($pattern,$html,$matches);
-  //var_dump($html);
-//$newslist_tt = array(); 
-    if(sizeof($matches) > 0)
-    {
-      $dom = str_get_html($matches[0]);
-      if($index < -1)
-      {
-        $elements = $dom->find($selector);
-        foreach($elements as $element)
-        {
-          $href = $element->href;
-          $text = $element->plaintext;
-          $src  = $element->src;
-        //echo $text . "                          " . $href . "<br>";
-          $news = array("href" =>$href, "text" => $text,"src" => $src);
-          array_push($newslist_tt,$news);
-        }
-      } else {
-        $element = $dom->find($selector,$index);
-        $href = $element->href;
-        $text = $element->plaintext;
-        $src  = $element->src;
-        //echo $text . "                          " . $href . "<br>";
-
-        $news = array("href" =>$href, "text" => $text,"src" => $src);
-        array_push($newslist_tt,$news);
-      }
-    }
-  }
-  
-  function add_newslist_tt($html,$news_info)
-  {
-    global $newslist_tt; 
-
-    $url = $news_info->url;
-//    echo $news_info->pattern . "<br>";
-    $pattern = $news_info->pattern;
-    $selector = $news_info->selector;
-    $index = $news_info->index;
-
-    preg_match($pattern,$html,$matches);
-  //var_dump($html);
-//$newslist_tt = array(); 
-
-
-    if(sizeof($matches) > 0)
-    {
-    //echo $news_info->pattern . "<br>--";
-    echo $matches[0] . "<br>--";
-      $dom = str_get_html($matches[0]);
-
-      if($index < -1)
-      {
-        $elements = $dom->find($selector);
-        foreach($elements as $element)
-        {
-          $href = $element->href;
-          $text = $element->plaintext;
-          $src  = $element->src;
-        //echo $text . "                          " . $href . "<br>";
-          $news = array("href" =>$href, "text" => $text,"src" => $src);
-          array_push($newslist_tt,$news);
-        }
-      } else {
-           //   echo "matches==>";
-        $element = $dom->find($selector,$index);
-        $href = $element->href;
-        $text = $element->plaintext;
-        $src  = $element->src;
-        //echo $text . "                          " . $href . "<br>";
-
-        $news = array("href" =>$href, "text" => $text,"src" => $src);
-        array_push($newslist_tt,$news);
-      }
-    }
-   // $pattern = $siteinfo->pattern;
-   // $selector = $siteinfo->selector;
-   // $index = $siteinfo->index;
-  	  
-  	  
-   // echo "OK" . "<br>";
-  }
   
 
 ?>
