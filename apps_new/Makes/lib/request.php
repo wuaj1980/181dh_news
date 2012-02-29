@@ -10,13 +10,14 @@ function execute($news_info_list, $callback,$proxy){
 
     rolling_curl($news_info_list,$callback,$custom_options);
 
-    return $contents;
+    //return $contents;
 }
 
 function rolling_curl($news_info_list, $callback, $custom_options = null) {
 
     // make sure the rolling window isn't greater than the # of urls
-    $rolling_window = 5;
+    $rolling_window = 2;
+    $wait_usec = 250000;
     $news_info_size = sizeof($news_info_list);
     $rolling_window = ($news_info_size < $rolling_window) ? $news_info_size : $rolling_window;
 
@@ -38,7 +39,16 @@ function rolling_curl($news_info_list, $callback, $custom_options = null) {
     }
     $index = 0;
     do {
-        while(($execrun = curl_multi_exec($master, $running)) == CURLM_CALL_MULTI_PERFORM);
+//        while(($execrun = curl_multi_exec($master, $running)) == CURLM_CALL_MULTI_PERFORM);
+        
+        
+         do {
+            $execrun = curl_multi_exec($master, $running);
+
+           if ($wait_usec > 0) /* &#27599;˜¢ connect —v&#38388;Šu‘½‹v */
+               usleep($wait_usec); // 250000 = 0.25 sec
+         } while ($execrun == CURLM_CALL_MULTI_PERFORM);
+
         if($execrun != CURLM_OK)
             break;
 
@@ -50,10 +60,15 @@ function rolling_curl($news_info_list, $callback, $custom_options = null) {
 
                 $html = curl_multi_getcontent($done['handle']);
                 $html = convertEncoding($html);
+    //$fp = fopen("test.txt", 'ab');
+    //flock($fp, LOCK_EX);
 
                 // request successful.  process output using the callback function.
-                $callback($html,$news_info_list[$index++]);
-
+//echo strlen($html);
+                $callback($html,$news_info_list[$index]);
+                //echo "index=" . $index;
+               // echo "     len=" . strlen($html);
+                $index += 1;
                 // start a new request (it's important to do this before removing the old one)
                 $next = $i++;// increment i 
                 //echo $next;

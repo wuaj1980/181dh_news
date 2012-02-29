@@ -6,9 +6,17 @@
 class Http_MultiRequest {
     static private $listenerList;
     private $callback;
-    public function __construct($url){
+
+    $newslist = array();
+
+    public function __construct($news_info){
         $new =& self::$listenerList[];
-        $new['url'] = $url;
+        $new['news_info'] = $news_info;
+        $new['url'] = $news_info->url;
+            //$news_info->url = "http://news.sina.com.cn/world/";
+    //$news_info->pattern = = "/<div\sclass=\"blkTop\"[^>]*>.*?<\/h1>/is";
+        
+        
         $this->callback =& $new;
     }
     /**
@@ -84,8 +92,9 @@ class Http_MultiRequest {
                     if ($listener['handle'] === $done['handle']) {
                         # Get content
                         $html = curl_multi_getcontent($done['handle']);
+                        $html = Http_MultiRequest::convertEncoding($html);
                         # Call the callback.
-                        call_user_func($listener['callback'],$listener['url'],$html,(microtime(1)-$listener['start']));
+                        call_user_func($listener['callback'],$listener['news_info'],$html,(microtime(1)-$listener['start']));
                         # Remove unnecesary handle (optional, script works without it).
                         curl_multi_remove_handle($mh, $done['handle']);
                     }
@@ -105,23 +114,28 @@ class Http_MultiRequest {
         curl_multi_close($mh);
     
     }
+    
+    static function convertEncoding($html){
+      $formEncoding = mb_detect_encoding($html,array("ASCII","UTF-8","GB2312","GBK","BIG5"));
+  // echo $formEncoding;
+      $contents = mb_convert_encoding($html,'utf-8',$formEncoding);
+      return $contents;
+    }
+    
 }
 
-$curlGoogle = new Http_MultiRequest('http://news.sina.com.cn/world/');
-$curlGoogle->addListener('callbackGoogle');
+//$curlGoogle = new Http_MultiRequest('http://news.sina.com.cn/world/');
+//$curlGoogle->addListener('callbackGoogle');
 
-$curlMySpace = new Http_MultiRequest('http://news.ifeng.com/mainland/');
-$curlMySpace->addListener('callbackGoogle');
+//$curlMySpace = new Http_MultiRequest('http://news.ifeng.com/mainland/');
+//$curlMySpace->addListener('callbackGoogle');
 
-Http_MultiRequest::request();
-  function callbackGoogle($url,$html,$time)
-  {
-    echo $time . "    " .$url . "<br>";
-  }
+//Http_MultiRequest::request();
+//  function callbackGoogle($url,$html,$time)
+//  {
+//    echo $time . "    " .$url . "<br>";
+//  }
   
-  function callbackMySpace($url,$html,$time)
-  {
-echo $time . "<br>";
-  }
+
 
 ?>
