@@ -6,6 +6,6 @@ class NewsInfo
   public $urlpre;
   public $pattern;
   public $selector = "a";
-
+  public $list_index = 0;
 }
 ?>
