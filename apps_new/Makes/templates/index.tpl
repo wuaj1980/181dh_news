@@ -11,7 +11,7 @@
     {%elseif $smarty.section.i.index == 3%}<li><a target="_self" class="title" href="gj/index.htm">[国际]</a>&nbsp;<a href="{%$newslist_tt[i].href%}" target="_blank">{%$newslist_tt[i].text%}</a></li>
     {%elseif $smarty.section.i.index == 4%}<li><a target="_self" class="title" href="yl/index.htm">[娱乐]</a>&nbsp;<a href="{%$newslist_tt[i].href%}" target="_blank">{%$newslist_tt[i].text%}</a></li>
     {%elseif $smarty.section.i.index == 5%}<li><a target="_self" class="title" href="gj/index.htm">[国际]</a>&nbsp;<a href="{%$newslist_tt[i].href%}" target="_blank">{%$newslist_tt[i].text%}</a></li>
-    {%elseif $smarty.section.i.index == 6%}  <li class="emphasis"><a href="{%$newslist_tt[i].href%}" target="_blank" class="linktitle">{%$newslist_tt[i].text%}</a></li>
+    {%elseif $smarty.section.i.index == 6%}<div></div><li class="emphasis"><a href="{%$newslist_tt[i].href%}" target="_blank" class="linktitle">{%$newslist_tt[i].text%}</a></li>
     {%elseif $smarty.section.i.index == 7%}<li><a target="_self" class="title" href="gj/index.htm">[体育]</a>&nbsp;<a href="{%$newslist_tt[i].href%}" target="_blank">{%$newslist_tt[i].text%}</a></li>
     {%elseif $smarty.section.i.index == 8%}<li><a target="_self" class="title" href="gj/index.htm">[国内]</a>&nbsp;<a href="{%$newslist_tt[i].href%}" target="_blank">{%$newslist_tt[i].text%}</a></li>
     {%elseif $smarty.section.i.index == 9%}<li><a target="_self" class="title" href="gj/index.htm">[社会]</a>&nbsp;<a href="{%$newslist_tt[i].href%}" target="_blank">{%$newslist_tt[i].text%}</a></li>

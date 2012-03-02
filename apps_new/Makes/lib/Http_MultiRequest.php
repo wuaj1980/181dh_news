@@ -7,8 +7,6 @@ class Http_MultiRequest {
     static private $listenerList;
     private $callback;
 
-    $newslist = array();
-
     public function __construct($news_info){
         $new =& self::$listenerList[];
         $new['news_info'] = $news_info;
@@ -35,12 +33,12 @@ class Http_MultiRequest {
     * Request all the created curlNode objects, and invoke associated callbacks.
     **/
     static public function request(){
-    
+        $newslist = array();
+
         //create the multiple cURL handle
         $mh = curl_multi_init();
-        
         $running=null;
-        
+
         # Setup all curl handles
         # Loop through each created curlNode object.
         foreach(self::$listenerList as &$listener){
@@ -53,7 +51,6 @@ class Http_MultiRequest {
 
             curl_setopt($current, CURLOPT_PROXY, '172.28.138.13:8080');
                         //curl_setopt($current, CURLOPT_PROXYUSERPWD, ":");
-
 
             curl_setopt($current, CURLOPT_URL, $url);
             # Since we don't want to display multiple pages in a single php file, do we?
@@ -86,6 +83,7 @@ class Http_MultiRequest {
                $info = curl_getinfo($done['handle']);
                //echo $info['http_code'];
                if ($info['http_code'] == 200)  {
+
                 # Call the associated listener
                 foreach(self::$listenerList as $listener){
                     # Strict compare handles.
@@ -94,7 +92,7 @@ class Http_MultiRequest {
                         $html = curl_multi_getcontent($done['handle']);
                         $html = Http_MultiRequest::convertEncoding($html);
                         # Call the callback.
-                        call_user_func($listener['callback'],$listener['news_info'],$html,(microtime(1)-$listener['start']));
+                        call_user_func($listener['callback'],$listener['news_info'],$html,&$newslist,(microtime(1)-$listener['start']));
                         # Remove unnecesary handle (optional, script works without it).
                         curl_multi_remove_handle($mh, $done['handle']);
                     }
@@ -112,7 +110,7 @@ class Http_MultiRequest {
 
         # Finish out our script ;)
         curl_multi_close($mh);
-    
+        return $newslist;
     }
     
     static function convertEncoding($html){

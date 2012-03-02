@@ -9,7 +9,7 @@
   ini_set("max_execution_time", 2400);
   ini_set("memory_limit", 1048576000);
   //$proxy = '172.28.138.13:8080';
-
+/*
   // 头条1-
   $url = "http://news.sina.com.cn/world/";
   $pattern = "/<div\sclass=\"blkTop\"[^>]*>.*?<\/h1>/is";
@@ -51,7 +51,7 @@
   // 社会
   $url = "http://www.chinanews.com/society.shtml";
   $pattern =  "/<div\sclass=\"dd_bt\"[^>]*>.*?<\/div>/is";
-  addNewsInfo($url, $pattern);
+  addNewsInfo($url, $pattern,'a',0,0,'http://www.chinanews.com');
   // 娱乐
   $url = "http://ent.163.com/";
   $pattern =  "/<h3\sclass=\"bigsize\"[^>]*>.*?<\/h3>/is";
@@ -59,34 +59,49 @@
   // 国际
   $url = "http://www.zaobao.com/gj/gj.shtml";
   $pattern =  "/<div\salign=\"left\"\sclass=\"title\"[^>]*>.*?<\/a>/is";
-  addNewsInfo($url, $pattern);
+  addNewsInfo($url, $pattern,'a',0,0,'http://www.zaobao.com');
+*/
 
-  Http_MultiRequest::request();
-  
-    $newslist_tt = array();
-    sizeof($newslist_tt);
-    foreach($newslist_tt as $news)
-    {
-       echo $news["href"] . "      " . $news["text"] . "                          " .$news["src"] . "<br>";
-    }
-  
-echo "-----------------------------------------------------------";
-sizeof("==========" . sizeof($newslist_tt));
-  function callbackNews($news_info,$html,$time)
+  // 国际
+//  $url = "http://www.zaobao.com/gj/gj.shtml";
+//  $pattern =  "/<div\salign=\"left\"\sclass=\"title\"[^>]*>.*?<\/a>/is";
+//  addNewsInfo($url, $pattern,'a',0,0,'http://www.zaobao.com');
+
+
+  // 国际
+  $url = "http://news.ifeng.com/photo/";
+  $pattern =  "/<div\sclass=\"huaBox\"[^>]*>.*?<\/li>.*?<\/li>/is";
+  addNewsInfo($url, $pattern,'a',1,0);
+
+  // 国际
+  $url = "http://news.ifeng.com/photo/";
+  $pattern =  "/<div\sclass=\"huaBox\"[^>]*>.*?<\/li>.*?<\/li>/is";
+  addNewsInfo($url, $pattern,'a',3,1);
+
+  // 所有头条新闻
+  $newslist_tt = Http_MultiRequest::request();
+
+for($i = 0;$i < sizeof($newslist_tt);$i++) {
+	var_dump($newslist_tt[$i]);
+}
+
+
+  function callbackNews($news_info,$html,&$newslist,$time)
   {
-    global $newslist_tt; 
-
+    echo "==============";
     $url = $news_info->url;
     $pattern = $news_info->pattern;
     $selector = $news_info->selector;
     $index = $news_info->index;
+    $imgindex = $news_info->imgindex;
     $list_index = $news_info->list_index;
+    $urlpre = $news_info->urlpre;
 
     preg_match($pattern,$html,$matches);
+
     if(sizeof($matches) > 0)
     {
       $dom = str_get_html($matches[0]);
-      
       if($index < -1)
       {
         $elements = $dom->find($selector);
@@ -97,26 +112,27 @@ sizeof("==========" . sizeof($newslist_tt));
           $src  = $element->src;
         //echo $text . "                          " . $href . "<br>";
           $news = array("href" =>$href, "text" => $text,"src" => $src);
-          //array_push($newslist_tt,$news);
+          array_push($newslist,$news);
         }
       } else {
            //   echo "matches==>";
         $element = $dom->find($selector,$index);
-        $href = $element->href;
+        $imgelement = $dom->find("img",$imgindex);
+        $href = $urlpre == null?$element->href:$urlpre . $element->href;
         $text = $element->plaintext;
-        $src  = $element->src;
-        echo $list_index . "      " . $text . "                          " . $href . "<br>";
+        $src  = $imgelement->src;
+        //echo $list_index . "      " . $text . "                          " . $href . "<br>";
 
-        $news = array("href" =>$href, "text" => $text,"src" => $src);
-        $newslist_tt[$list_index] = $news;
-        //array_push($newslist_tt,$news);
+        $news = array("href" =>$href, "text" => $text,"src" => $src,"index" =>$list_index);
+        $newslist[$list_index-1] = $news;
+        //array_push($newslist,$news);
       }
       unset($dom);
     }
   }
 
   $list_index = 0;
-  function addNewsInfo($url, $pattern, $selector = "a", $index = 0, $urlpre = null)
+  function addNewsInfo($url, $pattern, $selector = "a", $index = 0, $imgindex = 0, $urlpre = null)
   {
     global $list_index;
     $list_index = $list_index + 1;
@@ -125,6 +141,7 @@ sizeof("==========" . sizeof($newslist_tt));
     $news_info->pattern = $pattern;
     $news_info->selector = $selector;
     $news_info->index = $index;
+    $news_info->imgindex = $imgindex;
     $news_info->urlpre = $urlpre;
     $news_info->list_index = $list_index;
 
@@ -225,13 +242,13 @@ sizeof("==========" . sizeof($newslist_tt));
   unset($siteinfo);
   var_dump($newslist_tt); */
 
-  //$smarty->assign("newslist_163",$instance_163->getNewsList());//网易新闻
 
-/* 首页生成 */
-//$news_dir = ROOT_DIR."/apps_new/news/";
-//$smarty->MakeHtmlFile($news_dir,"index.htm",$smarty->fetch("index.tpl"));
-//echo "首页生成成功";
 
-  
+//  $smarty->assign("newslist_tt",$newslist_tt);//首页 头条
+
+  /* 首页生成 */
+//  $news_dir = ROOT_DIR."/apps_new/news/";
+//  $smarty->MakeHtmlFile($news_dir,"index.htm",$smarty->fetch("index.tpl"));
+//  echo "首页生成成功";  
 
 ?>
