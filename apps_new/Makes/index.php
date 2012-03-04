@@ -60,23 +60,88 @@
   $url = "http://www.zaobao.com/gj/gj.shtml";
   $pattern =  "/<div\salign=\"left\"\sclass=\"title\"[^>]*>.*?<\/a>/is";
   addNewsInfo($url, $pattern,'a',0,0,'http://www.zaobao.com');
+
+  // 头条图片1
+  $url = "http://news.ifeng.com/photo/";
+  $pattern =  "/<div\sclass=\"photoPublicBox\"[^>]*>.*?<\/h3>/is";
+  addNewsInfo($url, $pattern,'a',1,0);
+  // 头条图片2
+  $url = "http://news.ifeng.com/photo/";
+  $pattern =  "/<div\sclass=\"photoPublicBox\"[^>]*>.*?<\/h3>.*?<\/h3>/is";
+  addNewsInfo($url, $pattern,'a',4,1);
+  $smarty->assign("tt_photo",$newslist_tt);
+*/
+/*
+//---------------- 重点关注 start------------------------------
+  // 腾讯排行 
+  $url = "http://news.qq.com/paihang.htm";
+  $pattern =  "/<tr\sbgcolor=\"#FFFFFF\"[^>]*>.*?<\/table>/is";
+  addNewsInfo($url, $pattern,'.pl18 a',-1);
+  $smarty->assign("news_qqpaihang",$newslist_tt);
+
+  // 网易新闻
+  $url = "http://news.163.com/domestic/";
+  $pattern =  "/<ul\sclass=\"cList1\"[^>]*>.*?<\/ul>/is";
+  addNewsInfo($url, $pattern,'a',-1);
+  $smarty->assign("news_163",$newslist_tt);
+
+  // 凤凰新闻
+  $url = "http://news.ifeng.com/toprank/day/";
+  $pattern =  "/<div\sclass=\"listPicBox\"[^>]*>.*?<div\sclass=\"rightbar\"[^>]*>/is";
+  addNewsInfo($url, $pattern,'.sys_url',-1);
+  $smarty->assign("news_ifeng",$newslist_tt);
+
+  // 网易图片新闻
+  $url = "http://news.163.com/photo/";
+  $pattern =  "/<ul\sclass=\"list_pic\spic_3\sclearfix\"[^>]*>.*?<\/div>/is";
+  addNewsInfo($url, $pattern,'h5 a',-1);
+  $smarty->assign("news_qqht",$newslist_tt);
+//---------------- 重点关注 end------------------------------
+
+//---------------- 今日话题 start----------------------------
+  // 新浪评论 js
+  // 腾讯话题
+  $url = "http://view.news.qq.com/";
+  $pattern =  "/<ol\sclass=\"bd\"[^>]*>.*?<\/ol>/is";
+  addNewsInfo($url, $pattern,'a',-1);
+  $smarty->assign("news_qqht",$newslist_tt);
+
+  // 视频新闻
+  $url = "http://news.youku.com/focus/index";
+  $pattern =  "/<div\sclass=\"collgrid6t\"[^>]*>.*?<div\sclass=\"LPageBar\"[^>]*>/is";
+  addNewsInfo($url, $pattern,'.v_title a',-1);
+  $smarty->assign("news_qqht",$newslist_tt);
+//---------------- 今日话题 end----------------------------
+
+//---------------- 互联网江湖 start------------------------
+  // 互联网要闻
+  $url = "http://tech.sina.com.cn/topnews/index.html";
+  $pattern =  "/<table\scellspacing=01\sbgcolor=#E8E8E8[^>]*>.*?<\/table>/is";
+  addNewsInfo($url, $pattern,'span a',-1);
+  $smarty->assign("sina_tech",$newslist_tt);
+
+  // 人在江湖
+  $url = "http://tech.sina.com.cn/blog/internet/roll.html";
+  $pattern = "/class=f14.*?<br><br>.*?<br><br>.*?<br><br>.*?<br><br>/is";
+  addNewsInfo($url, $pattern,'li a[target=_blank]',-1);
+  $smarty->assign("news_qqht",$newslist_tt);
+//---------------- 互联网江湖 end------------------------
+
+//---------------- 论坛热帖 start------------------------
+  // 天涯论坛
+  $url = "http://www.tianya.cn/bbs/index.shtml";
+  $pattern = "/<div\sclass=\"bbstime-list\"[^>]*>.*?<\/div>.*?<\/div>/is";
+  addNewsInfo($url, $pattern,'.bbstitle',-1);
+  $smarty->assign("news_qqht",$newslist_tt);
+
+  // 猫扑大杂烩
+  $url = "http://dzh.mop.com/right.do";
+  $pattern = "/<ul\sclass=\"phbC2\"[^>]*>.*?<\/ul>/is";
+  addNewsInfo($url, $pattern,'.dt_1 a',-1);
+  $smarty->assign("news_qqht",$newslist_tt);
+//---------------- 论坛热帖 end------------------------
 */
 
-  // 国际
-//  $url = "http://www.zaobao.com/gj/gj.shtml";
-//  $pattern =  "/<div\salign=\"left\"\sclass=\"title\"[^>]*>.*?<\/a>/is";
-//  addNewsInfo($url, $pattern,'a',0,0,'http://www.zaobao.com');
-
-
-  // 国际
-  $url = "http://news.ifeng.com/photo/";
-  $pattern =  "/<div\sclass=\"huaBox\"[^>]*>.*?<\/li>.*?<\/li>/is";
-  addNewsInfo($url, $pattern,'a',1,0);
-
-  // 国际
-  $url = "http://news.ifeng.com/photo/";
-  $pattern =  "/<div\sclass=\"huaBox\"[^>]*>.*?<\/li>.*?<\/li>/is";
-  addNewsInfo($url, $pattern,'a',3,1);
 
   // 所有头条新闻
   $newslist_tt = Http_MultiRequest::request();
@@ -88,7 +153,7 @@ for($i = 0;$i < sizeof($newslist_tt);$i++) {
 
   function callbackNews($news_info,$html,&$newslist,$time)
   {
-    echo "==============";
+    //echo "==============";
     $url = $news_info->url;
     $pattern = $news_info->pattern;
     $selector = $news_info->selector;
@@ -102,14 +167,22 @@ for($i = 0;$i < sizeof($newslist_tt);$i++) {
     if(sizeof($matches) > 0)
     {
       $dom = str_get_html($matches[0]);
-      if($index < -1)
+      if($index < 0)
       {
         $elements = $dom->find($selector);
+
         foreach($elements as $element)
         {
+          //$imgelement = $element->prev_sibling()->find("img",$imgindex);
+          $imgelement = "";
+          if($element->parent()->prev_sibling() != null)
+          {
+            $imgelement = $element->parent()->prev_sibling()->find("img",0);
+          }
+
           $href = $element->href;
           $text = $element->plaintext;
-          $src  = $element->src;
+          $src  = $imgelement->src;
         //echo $text . "                          " . $href . "<br>";
           $news = array("href" =>$href, "text" => $text,"src" => $src);
           array_push($newslist,$news);
@@ -150,105 +223,13 @@ for($i = 0;$i < sizeof($newslist_tt);$i++) {
     unset($news_info);
   }
 
-/*
-
-  $newslist_tt = array(); // 各大网站头条新闻
-  
-  $news_info_list = array(); // 各大网站头条新闻
-  $runtime->start();
-
-  // 头条1-
-  $url = "http://news.sina.com.cn/world/";
-  $pattern = "/<div\sclass=\"blkTop\"[^>]*>.*?<\/h1>/is";
-  setNewsInfoList($url, $pattern);
-
-
-
-
-
-
-
-
-  
-   //$selector = "a", $index = 0, $urlpre = null
-  
-
-  // 执行
-  execute($news_info_list,"add_newslist_tt",$proxy);
-*/
-  /*
-  //getNewsInfo($siteinfo);
-  $runtime->stop();
-  echo "头条1执行时间: ".$runtime->spent()." 毫秒";
-  
-
-
-  getNewsInfo($siteinfo);
-  unset($siteinfo);
-
-  getNewsInfo($siteinfo);
-  unset($siteinfo);
-
-  getNewsInfo($siteinfo);
-  unset($siteinfo);
-
-
-  // 头条2
-  $siteinfo = new NewsInfo();
-  $siteinfo->url = "http://news.163.com/";
-  $siteinfo->pattern = "/<h2\sclass=\"bigsize\"[^>]*>.*?<\/h2>/is";
-  getNewsInfo($siteinfo);
-  unset($siteinfo);
-  // 体育
-  $siteinfo = new NewsInfo();
-  $siteinfo->index = 2;
-  $siteinfo->url = "http://sports.people.com.cn/";
-  $siteinfo->pattern = "/<div class=\"p1_center\"[^>]*>.*?<\/h3>/is";
-  getNewsInfo($siteinfo);
-  unset($siteinfo);
-  // 国内
-  $siteinfo = new NewsInfo();
-  $siteinfo->url = "http://news.jinghua.cn/guonei/";
-  $siteinfo->pattern =  "/<div\sclass=\"left txt22 w_510\"[^>]*>.*?<\/h2>/is";
-  getNewsInfo($siteinfo);
-  unset($siteinfo);
-  // 社会
-  $siteinfo = new NewsInfo();
-  $siteinfo->url = "http://www.chinanews.com/society.shtml";
-  $siteinfo->pattern =  "/<div\sclass=\"dd_bt\"[^>]*>.*?<\/div>/is";
-  getNewsInfo($siteinfo);
-  unset($siteinfo);
-  // 娱乐
-  $siteinfo = new NewsInfo();
-  $siteinfo->url = "http://ent.163.com/";
-  $siteinfo->pattern =  "/<h3\sclass=\"bigsize\"[^>]*>.*?<\/h3>/is";
-  getNewsInfo($siteinfo);
-  unset($siteinfo);
-  // 国际
-  $siteinfo = new NewsInfo();
-  $siteinfo->url = "http://www.zaobao.com/gj/gj.shtml";
-  $siteinfo->pattern =  "/<div\salign=\"left\"\sclass=\"title\"[^>]*>.*?<\/a>/is";
-  getNewsInfo($siteinfo);
-  unset($siteinfo);
-  $smarty->assign("newslist_tt",$newslist_tt);// 左边头条
-
-  //var_dump($newslist_tt);
-  // 网易新闻
-  $siteinfo = new NewsInfo();
-  $siteinfo->index = -2;
-  $siteinfo->url = "http://news.163.com/domestic/";
-  $siteinfo->pattern =  "/<ul\sclass=\"cList1\"[^>]*>.*?<\/ul>/is";
-  getNewsInfo($siteinfo);
-  unset($siteinfo);
-  var_dump($newslist_tt); */
-
-
 
 //  $smarty->assign("newslist_tt",$newslist_tt);//首页 头条
+//  $smarty->assign("newslist_tt_photo",$newslist_tt);//首页 头条图片
 
   /* 首页生成 */
 //  $news_dir = ROOT_DIR."/apps_new/news/";
 //  $smarty->MakeHtmlFile($news_dir,"index.htm",$smarty->fetch("index.tpl"));
-//  echo "首页生成成功";  
+//  echo "首页生成成功";
 
 ?>

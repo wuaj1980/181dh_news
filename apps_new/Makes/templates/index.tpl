@@ -20,8 +20,11 @@
     {%/if%}
 {%/section%}
     </ul>
-    <p class="top1"><b><a href="http://news.jinghua.cn/351/c/201202/14/n3632059.shtml?fm=1616">top1</a></b></p>
-    <p class="top2"><b><a href="http://news.jinghua.cn/352/c/201202/14/n3632502.shtml?fm=1616">top2</a></b></p>
+{%section name=i max=2 loop=$newslist_tt_photo%}
+    {%if $smarty.section.i.index == 0%}<p class="top1"><a href="{%$newslist_tt_photo[i].href%}"><img src="{%$newslist_tt_photo[i].src%}" alt="{%$newslist_tt_photo[i].text%}"></a><b><a href="{%$newslist_tt_photo[i].href%}">{%$newslist_tt_photo[i].text%}</a></b></p>
+    {%else%}<p class="top2"><a href="{%$newslist_tt_photo[i].href%}"><img src="{%$newslist_tt_photo[i].src%}" alt="{%$newslist_tt_photo[i].text%}"></a><b><a href="{%$newslist_tt_photo[i].href%}">{%$newslist_tt_photo[i].text%}</a></b></p>
+    {%/if%}
+{%/section%}
   </div><!--新闻焦点 结束-->
 <!--右边-->
   <div id="app_news_focus_r">
@@ -50,7 +53,16 @@
       <h3>新浪热点</h3><a href="http://news.sina.com.cn/hotnews/">更多>></a>
     </div>
     <ul>
-
+function showHot(data_arr){
+  var html= '';
+  data = data_arr['data'];
+  for(var i in data){
+    html+='<li><a href="'+data[i].url+'" target="_blank" title="'+data[i].title+'">'+data[i].title+'</a><span>&nbsp;</span></li>';
+  }
+  document.write(html);
+}
+</script> 
+<script type="text/javascript" src="http://top.news.sina.com.cn/ws/GetTopDataList.php?top_type=day&top_cat=www_all&top_time=20120304&top_show_num=10&top_order=ASC&js_var=all_1_data&call_back=showHot"></script> 
     </ul>
   </div><!--新浪热点 结束-->
 
@@ -107,9 +119,17 @@
       <h3>新浪评论</h3><a href="http://news.sina.com.cn/opinion/shelun/index.html">更多>></a>
     </div>
     <ul>
-{%section name=i max=10 loop=$newslist_sinapl%}
-<li><a href="{%$newslist_sinapl[i].href%}">{%$newslist_sinapl[i].text%}</a></li>
-{%/section%}
+  <script type="text/javascript"> 
+function showContent(data_arr){
+	var html= '';
+	data = data_arr['data'];
+	for(var i in data){
+		html+='<li><a href="'+data[i].url+'" target="_blank" title="'+data[i].title+'">'+data[i].title+'</a><span>&nbsp;</span></li>';
+	}
+	document.write(html);
+}
+</script> 
+<script type="text/javascript" src="http://top.news.sina.com.cn/ws/GetTopDataList.php?top_type=day&top_cat=newspl&top_time=20120304&top_show_num=10&top_order=ASC&js_var=newspl_1_data&call_back=showContent"></script> 
     </ul>
   </div><!--新浪评论 结束-->
 
@@ -191,6 +211,9 @@
       <li><a href="test">猫扑大杂烩9</a></li>
       <li><a href="test">猫扑大杂烩10</a></li>
     </ul>
+
+
+
   </div><!--猫扑大杂烩 结束 -->
 </div><!--论坛热帖 结束 -->
 
