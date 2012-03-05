@@ -23,6 +23,11 @@ class Http_MultiRequest {
     public function addListener($callback){
         $this->callback['callback'] = $callback;
     }
+
+    static public function clearListener(){
+      
+    }
+    
     /**
     * curl_setopt() wrapper. Enjoy!
     **/
@@ -49,8 +54,8 @@ class Http_MultiRequest {
             # This can be improved by creating
             $current = curl_init();
 
-            //curl_setopt($current, CURLOPT_PROXY, '172.28.138.13:8080');
-                        //curl_setopt($current, CURLOPT_PROXYUSERPWD, ":");
+            curl_setopt($current, CURLOPT_PROXY, '172.28.138.13:8080');
+            //curl_setopt($current, CURLOPT_PROXYUSERPWD, ":");
 
             curl_setopt($current, CURLOPT_URL, $url);
             # Since we don't want to display multiple pages in a single php file, do we?
