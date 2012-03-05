@@ -9,7 +9,7 @@
   ini_set("max_execution_time", 2400);
   ini_set("memory_limit", 1048576000);
   //$proxy = '172.28.138.13:8080';
-/*
+
   // 头条1-
   $url = "http://news.sina.com.cn/world/";
   $pattern = "/<div\sclass=\"blkTop\"[^>]*>.*?<\/h1>/is";
@@ -61,6 +61,14 @@
   $pattern =  "/<div\salign=\"left\"\sclass=\"title\"[^>]*>.*?<\/a>/is";
   addNewsInfo($url, $pattern,'a',0,0,'http://www.zaobao.com');
 
+  // 头条文字新闻
+  $tt_text = Http_MultiRequest::request();
+  $smarty->assign("tt_text",$tt_text);
+
+for($i = 0;$i < sizeof($tt_text);$i++) {
+	var_dump($tt_text[$i]);
+}
+
   // 头条图片1
   $url = "http://news.ifeng.com/photo/";
   $pattern =  "/<div\sclass=\"photoPublicBox\"[^>]*>.*?<\/h3>/is";
@@ -69,8 +77,15 @@
   $url = "http://news.ifeng.com/photo/";
   $pattern =  "/<div\sclass=\"photoPublicBox\"[^>]*>.*?<\/h3>.*?<\/h3>/is";
   addNewsInfo($url, $pattern,'a',4,1);
-  $smarty->assign("tt_photo",$newslist_tt);
-*/
+
+  // 头条图片新闻
+  $tt_photo = Http_MultiRequest::request();
+  $smarty->assign("tt_photo",$tt_photo);
+
+for($i = 0;$i < sizeof($tt_photo);$i++) {
+	var_dump($tt_photo[$i]);
+}
+
 /*
 //---------------- 重点关注 start------------------------------
   // 腾讯排行 
@@ -140,7 +155,7 @@
   addNewsInfo($url, $pattern,'.dt_1 a',-1);
   $smarty->assign("news_qqht",$newslist_tt);
 //---------------- 论坛热帖 end------------------------
-*/
+
 
 
   // 所有头条新闻
@@ -149,8 +164,7 @@
 for($i = 0;$i < sizeof($newslist_tt);$i++) {
 	var_dump($newslist_tt[$i]);
 }
-
-
+*/
   function callbackNews($news_info,$html,&$newslist,$time)
   {
     //echo "==============";
@@ -191,9 +205,14 @@ for($i = 0;$i < sizeof($newslist_tt);$i++) {
            //   echo "matches==>";
         $element = $dom->find($selector,$index);
         $imgelement = $dom->find("img",$imgindex);
+        
         $href = $urlpre == null?$element->href:$urlpre . $element->href;
         $text = $element->plaintext;
-        $src  = $imgelement->src;
+        $src = "";
+        if($imgelement != null)
+        {
+          $src  = $imgelement->src;
+        }
         //echo $list_index . "      " . $text . "                          " . $href . "<br>";
 
         $news = array("href" =>$href, "text" => $text,"src" => $src,"index" =>$list_index);
