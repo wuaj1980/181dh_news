@@ -11,10 +11,6 @@ class Http_MultiRequest {
         $new =& self::$listenerList[];
         $new['news_info'] = $news_info;
         $new['url'] = $news_info->url;
-            //$news_info->url = "http://news.sina.com.cn/world/";
-    //$news_info->pattern = = "/<div\sclass=\"blkTop\"[^>]*>.*?<\/h1>/is";
-        
-        
         $this->callback =& $new;
     }
     /**
@@ -25,9 +21,9 @@ class Http_MultiRequest {
     }
 
     static public function clearListener(){
-      
+      self::$listenerList = null;
     }
-    
+
     /**
     * curl_setopt() wrapper. Enjoy!
     **/
