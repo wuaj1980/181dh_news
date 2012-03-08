@@ -6,7 +6,7 @@
   ini_set("max_execution_time", 2400);
   ini_set("memory_limit", 1048576000);
   //$proxy = '172.28.138.13:8080';
-
+/*
   $tt_text = getTt();           // 头条文字新闻
   $tt_photo = getTtPhoto();     // 头条图片新闻
   $smarty->assign("tt_text",$tt_text);
@@ -22,13 +22,14 @@
   $smarty->assign("ifeng",$ifeng);
   $smarty->assign("wyphoto",$wyphoto);
   //--- 重点关注 end -------
+*/
 
   //--- 今日话题 start -------
   /* 新浪评论 js */
-  $qqht = getQqht();            // 腾讯话题
-  $ykvideo = getYkvideo();      // 优酷视频新闻
-  $smarty->assign("qqht",$qqht);
-  $smarty->assign("ykvideo",$ykvideo);
+//  $qqht = getQqht();            // 腾讯话题
+//  $ykvideo = getYkvideo();      // 优酷视频新闻
+//  $smarty->assign("qqht",$qqht);
+//  $smarty->assign("ykvideo",$ykvideo);
   //--- 今日话题 end ---------
 
   //--- 互联网江湖 start -------
@@ -38,14 +39,19 @@
   $smarty->assign("roll",$roll);
   //--- 互联网江湖 end -------
 
+foreach ($roll as $v) {
+   var_dump($v);
+}
+
+
   //--- 论坛热帖 start -------
-  $tybbs = getTybbs();          // 天涯论坛
-  $mopdzh = getMopdzh();        // 猫扑大杂烩
-  $smarty->assign("tybbs",$tybbs);
-  $smarty->assign("mopdzh",$mopdzh);
+//  $tybbs = getTybbs();          // 天涯论坛
+//  $mopdzh = getMopdzh();        // 猫扑大杂烩
+//  $smarty->assign("tybbs",$tybbs);
+//  $smarty->assign("mopdzh",$mopdzh);
 
   /* 首页生成 */
-  $news_dir = ROOT_DIR."/apps_new/news/";
-  $smarty->MakeHtmlFile($news_dir,"index.htm",$smarty->fetch("index.tpl"));
-  echo "首页生成成功";
+//  $news_dir = ROOT_DIR."/apps_new/news/";
+//  $smarty->MakeHtmlFile($news_dir,"index.htm",$smarty->fetch("index.tpl"));
+//  echo "首页生成成功";
 ?>
