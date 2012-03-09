@@ -6,17 +6,17 @@
     <ul>
 {%section name=i max=12 loop=$tt_text%}
     {%if $smarty.section.i.index == 0%}  <li class="emphasis"><a href="{%$tt_text[i].href%}" target="_blank" class="linktitle">{%$tt_text[i].text%}</a></li>
-    {%elseif $smarty.section.i.index == 1%}<li><a target="_self" class="title" href="gn/index.htm">[国内]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
-    {%elseif $smarty.section.i.index == 2%}<li><a target="_self" class="title" href="sh/index.htm">[社会]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
-    {%elseif $smarty.section.i.index == 3%}<li><a target="_self" class="title" href="gj/index.htm">[国际]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
-    {%elseif $smarty.section.i.index == 4%}<li><a target="_self" class="title" href="yl/index.htm">[娱乐]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
-    {%elseif $smarty.section.i.index == 5%}<li><a target="_self" class="title" href="gj/index.htm">[国际]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
+    {%elseif $smarty.section.i.index == 1%}<li><a target="_self" class="title" href="">[国内]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
+    {%elseif $smarty.section.i.index == 2%}<li><a target="_self" class="title" href="">[社会]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
+    {%elseif $smarty.section.i.index == 3%}<li><a target="_self" class="title" href="">[国际]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
+    {%elseif $smarty.section.i.index == 4%}<li><a target="_self" class="title" href="">[娱乐]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
+    {%elseif $smarty.section.i.index == 5%}<li><a target="_self" class="title" href="">[国际]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
     {%elseif $smarty.section.i.index == 6%}<div></div><li class="emphasis"><a href="{%$tt_text[i].href%}" target="_blank" class="linktitle">{%$tt_text[i].text%}</a></li>
-    {%elseif $smarty.section.i.index == 7%}<li><a target="_self" class="title" href="gj/index.htm">[体育]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
-    {%elseif $smarty.section.i.index == 8%}<li><a target="_self" class="title" href="gj/index.htm">[国内]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
-    {%elseif $smarty.section.i.index == 9%}<li><a target="_self" class="title" href="gj/index.htm">[社会]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
-    {%elseif $smarty.section.i.index == 10%}<li><a target="_self" class="title" href="gj/index.htm">[娱乐]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
-    {%elseif $smarty.section.i.index == 11%}<li><a target="_self" class="title" href="gj/index.htm">[国际]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
+    {%elseif $smarty.section.i.index == 7%}<li><a target="_self" class="title" href="">[体育]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
+    {%elseif $smarty.section.i.index == 8%}<li><a target="_self" class="title" href="">[国内]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
+    {%elseif $smarty.section.i.index == 9%}<li><a target="_self" class="title" href="">[社会]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
+    {%elseif $smarty.section.i.index == 10%}<li><a target="_self" class="title" href="">[娱乐]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
+    {%elseif $smarty.section.i.index == 11%}<li><a target="_self" class="title" href="">[国际]</a>&nbsp;<a href="{%$tt_text[i].href%}" target="_blank">{%$tt_text[i].text%}</a></li>
     {%/if%}
 {%/section%}
     </ul>
@@ -31,15 +31,24 @@
     <ul s16="首页>新闻热搜词">
       <h4>新闻热搜词</h4>
       <li>
-        <a href="test">国家最高科技奖</a>
-        <a href="test">国家最高科技奖</a>
-        <a href="test">国家最高科技奖</a>
+{%section name=i max=15 loop=$baidutop%}
+<a href="{%$baidutop[i].href%}">{%$baidutop[i].text%}</a>
+{%/section%}
       </li>
     </ul><!--新闻热搜词 结束-->
     <ul class="newsname">
       <h4>新闻网站</h4>
       <dl>
-        <a target="_blank" class="box" href="test">人&nbsp;民&nbsp;网</a>
+        <a target="_blank" class="box" href="http://news.sina.com.cn/">新浪新闻</a>
+        <a target="_blank" class="box" href="http://news.163.com/">网易新闻</a>
+        <a target="_blank" class="box" href="http://news.sohu.com/">搜狐新闻</a>
+        <a target="_blank" class="box" href="http://news.qq.com/">腾讯新闻</a>
+        <a target="_blank" class="box" href="http://www.xinhuanet.com/newscenter/index.htm">新&nbsp;华&nbsp;网</a>
+        <a target="_blank" class="box" href="http://www.huanqiu.com/">环&nbsp;球&nbsp;网</a>
+        <a target="_blank" class="box" href="http://news.ifeng.com/">凤凰资讯</a>
+        <a target="_blank" class="box" href="http://www.chinanews.com.cn/">中国新闻</a>
+        <a target="_blank" class="box" href="http://www.zaobao.com/">联合早报</a>
+        <a target="_blank" class="box" href="http://news.people.com.cn/GB/index.html">人&nbsp;民&nbsp;网</a> 
       </dl>
     </ul><!--新闻网站 结束-->
   </div>
@@ -63,7 +72,7 @@ function showHot(data_arr){
   document.write(html);
 }
 </script> 
-<script type="text/javascript" src="http://top.news.sina.com.cn/ws/GetTopDataList.php?top_type=day&top_cat=www_all&top_time=20120304&top_show_num=10&top_order=ASC&js_var=all_1_data&call_back=showHot"></script> 
+<script type="text/javascript" src="http://top.news.sina.com.cn/ws/GetTopDataList.php?top_type=day&top_cat=www_all&top_time=20120304&top_show_num=8&top_order=ASC&js_var=all_1_data&call_back=showHot"></script> 
     </ul>
   </div><!--新浪热点 结束-->
 
@@ -72,7 +81,7 @@ function showHot(data_arr){
       <h3>腾讯排行</h3><a href="http://news.qq.com/paihang.htm"> 更多>></a>
     </div>
     <ul>
-{%section name=i max=10 loop=$qqph%}
+{%section name=i max=8 loop=$qqph%}
 <li><a href="{%$qqph[i].href%}">{%$qqph[i].text%}</a></li>
 {%/section%}
     </ul>
@@ -83,7 +92,7 @@ function showHot(data_arr){
       <h3>网易新闻</h3><a href="http://news.163.com/special/0001386F/rank_whole.html">更多>></a>
     </div>
     <ul>
-{%section name=i max=10 loop=$wy163%}
+{%section name=i max=8 loop=$wy163%}
 <li><a href="{%$wy163[i].href%}">{%$wy163[i].text%}</a></li>
 {%/section%}
     </ul>
@@ -94,7 +103,7 @@ function showHot(data_arr){
       <h3>凤凰新闻</h3><a href="http://news.ifeng.com/toprank/hour/">更多>></a>
     </div>
     <ul>
-{%section name=i max=10 loop=$ifeng%}
+{%section name=i max=8 loop=$ifeng%}
 <li><a href="{%$ifeng[i].href%}">{%$ifeng[i].text%}</a></li>
 {%/section%}
     </ul>
@@ -175,7 +184,7 @@ function showContent(data_arr){
       <a href="http://tech.sina.com.cn/blog/internet/roll.html">更多>></a>
     </div>
     <ul>
-{%section name=i max=10 loop=$roll%}
+{%section name=i max=10 step=2 loop=$roll%}
 <li><a href="{%$roll[i].href%}">{%$roll[i].text%}</a></li>
 {%/section%}
     </ul>

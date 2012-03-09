@@ -23,15 +23,4 @@
 		<!--tab开始-->
 		<div id="app_news_tab" class="app_tabarea">
 			<a  class="app_bt_sc" href="index-1.htm" target="_self">首页</a>
-			<a  href="gn/index.htm" target="_self">国内</a>
-			<a  href="gj/index.htm" target="_self">国际</a>
-			<a  href="yl/index.htm" target="_self">娱乐<em class="new">New!</em></a>
-			<a  href="http://apps.1616.net/news/cj/" target="_self">财经</a>
-			<a  href="http://apps.1616.net/news/ty/" target="_self">体育</a>
-			<a  href="tp/index.htm" target="_self">图片</a>
-			<a  href="junshi/index.htm" target="_self">军事</a>
-			<a  href="sh/index.htm" target="_self">社会</a>
-			<a  href="qc/index.htm" target="_self">汽车</a>
-			<a  href="fc/index.htm" target="_self">房产</a>
-			<a  href="kj/index.htm" target="_self">科技</a>
 		</div>
