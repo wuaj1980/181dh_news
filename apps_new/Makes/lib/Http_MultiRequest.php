@@ -50,7 +50,7 @@ class Http_MultiRequest {
             # This can be improved by creating
             $current = curl_init();
 
-            curl_setopt($current, CURLOPT_PROXY, '172.28.138.13:8080');
+            //curl_setopt($current, CURLOPT_PROXY, '172.28.138.13:8080');
             //curl_setopt($current, CURLOPT_PROXYUSERPWD, ":");
 
             curl_setopt($current, CURLOPT_URL, $url);

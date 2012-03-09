@@ -76,6 +76,15 @@
     return getNewsInfoList();
   }
 
+  /* 百度热搜 */
+  function getBaiduTop()
+  {
+    $url = "http://top.baidu.com/buzz.php?p=top_keyword";
+    $pattern =  "/<div\sclass=\"list\"[^>]*>.*?<\/div>/is";
+    addNewsInfo($url, $pattern,'.key a',-1);
+    return getNewsInfoList();
+  }
+
   /* 腾讯排行 */
   function getQqph()
   {
@@ -143,7 +152,7 @@
   function getRoll()
   {
     $url = "http://tech.sina.com.cn/blog/internet/roll.html";
-    $pattern = "/class=f14.*?<br><br>.*?<br><br>.*?<br><br>.*?<br><br>/is";
+    $pattern = "/class=f14.*?<br><br>.*?<br><br>.*?<br><br>.*?<br><br>.*?<br><br>/is";
     addNewsInfo($url, $pattern,'li a[target=_blank]',-1);
     return getNewsInfoList();
   }
@@ -210,7 +219,7 @@
           {
             $src  = $imgelement->src;
           }
-        //echo $text . "                          " . $href . "<br>";
+          //echo $text . "                          " . $href . "<br>";
           $news = array("href" =>$href, "text" => $text,"src" => $src);
           array_push($newslist,$news);
         }
